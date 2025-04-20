@@ -16,6 +16,19 @@ const io = new Server(server,{
 io.on('connection',(socket) => {
     console.log('🟢 new client is a connected : ',socket.id)
 
+    const generatedNumber = Math.floor((Math.random() * 100) + 1) 
+    socket.on('num-check',(data) => {
+        console.log("generated Num log : ",generatedNumber)
+        console.log("data for backend : ",data)
+        const checker = parseInt(data) === generatedNumber;
+        console.log("checker log : ", checker)
+
+        if(checker){
+            socket.emit('feedback',"you guess is correct")
+        }else{
+            socket.emit('feedback',"wrong guess !")
+        }
+    })
 
     socket.on('disconnect',() => {
         console.log('🔴 client disconnected .....',socket.id)
