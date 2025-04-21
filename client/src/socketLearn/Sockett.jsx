@@ -6,6 +6,7 @@ const Sockett = () => {
     const socketRef = useRef(null)
     const [guessNumber,setGuessNumber] = useState('')
     const [serverFeedback,setServerFeedback] = useState('')
+    const [playerId,setPlayerId] = useState(() => `id-${Math.random().toString(36).substring(2,9)}-${Date.now()}`)
 
     useEffect(() => {
         socketRef.current = io('http://localhost:3000')
@@ -30,8 +31,14 @@ const Sockett = () => {
             console.log('please enter valid number')
         }
     }
+
+    const joinRoom = () => {
+        socketRef.current.emit('join-room',playerId)
+    }
   return (
     <div>
+        <button onClick={joinRoom}>Join room</button>
+        <hr />
         <h2>send Number to validate</h2>
         <input type="text" value={guessNumber} onChange={e => setGuessNumber(e.target.value)} placeholder='Enter Number ...' />
         <button onClick={numberSender}>SEND</button>
